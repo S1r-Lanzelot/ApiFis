@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  frontend:
+    image: node:18
+    restart: always
+    volumes:
+      - ./api-fis:/app
+      - npm-cache:/root/.npm
+    working_dir: /app
+    entrypoint: /app/scripts/run.sh
+    command: npm run dev -- --hostname=0.0.0.0
+
+volumes:
+  npm-cache:
+    external: false

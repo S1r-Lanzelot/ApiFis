@@ -1,0 +1,43 @@
+{
+  "extends": ["next/core-web-vitals", "prettier", "eslint:recommended"],
+  "plugins": ["prettier"],
+  "env": { "es6": true },
+  "rules": {
+    "curly": ["error", "multi-line", "consistent"],
+    "prettier/prettier": "error",
+    "@next/next/link-passhref": "off",
+    "@next/next/no-img-element": "off",
+    "react/no-unescaped-entities": "off",
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "react-hooks/exhaustive-deps": [
+      "error",
+      {
+        "additionalHooks": "(usePromise)"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["./pages/**/*.jsx"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ],
+  "globals": {
+    "JSX": true
+  },
+  "settings": {
+    "next": {
+      "rootDir": "api-fis/"
+    }
+  }
+}

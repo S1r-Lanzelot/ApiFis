@@ -25,7 +25,7 @@ export const SanctionFilter = ({
   onNameChange,
 }) => {
   return (
-    <Grid container gap={2}>
+    <Grid container spacing={2}>
       <Grid item xs={6}>
         <TextField
           fullWidth
@@ -52,7 +52,7 @@ export const SanctionFilter = ({
             },
           }}
           fullWidth
-          disabled={loading}
+          disabled={loading || !discipline}
           label="Season"
           value={season ? new Date(season, 1, 1) : undefined}
           views={["year"]}
@@ -64,7 +64,7 @@ export const SanctionFilter = ({
       <Grid item xs={6}>
         <TextField
           fullWidth
-          disabled={loading}
+          disabled={loading || !discipline}
           label="Athlete's Name"
           value={name}
           onChange={(event) => onNameChange(event.target.value)}

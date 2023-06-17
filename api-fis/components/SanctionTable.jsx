@@ -19,8 +19,21 @@ import { useState } from "react";
 import { useMemo } from "react";
 import { CsvExporter } from "./CsvExporter";
 import { keyBy } from "lodash";
-import { ulid } from "ulid";
-import { Stack } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton } from "@mui/material";
+import { ViolationsDialog } from "./ViolationsDialog";
+import { Info } from "@mui/icons-material";
+import styled from "@emotion/styled";
+
+const StyledBackdrop = styled(Backdrop)`
+  z-index: 1000 !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+`;
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -86,6 +99,10 @@ const headCells = [
   {
     id: "fisCode",
     label: "FIS Code",
+  },
+  {
+    id: "violations",
+    label: "Violations",
   },
 ];
 
@@ -237,10 +254,11 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
   }, []);
 };
 
-export const SanctionTable = ({ sanctions }) => {
-  const [order, setOrder] = useState("asc");
+export const SanctionTable = ({ sanctions, loading }) => {
+  const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("date");
   const [selected, setSelected] = useState([]);
+  const [selectedViolationsDetail, setSelectedViolationsDetail] = useState(undefined);
 
   const handleRequestSort = (_, property) => {
     console.log(property);
@@ -292,79 +310,92 @@ export const SanctionTable = ({ sanctions }) => {
   }, [sortedRows, selected]);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <SanctionTableToolbar data={csvData} />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
-            <SanctionTableHeader
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={sanctions.length}
-            />
-            <TableBody>
-              {sortedRows.map((row) => (
-                <>
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.key)}
-                    role="checkbox"
-                    aria-checked={row.isSelected}
-                    tabIndex={-1}
-                    key={row.key}
-                    selected={row.isSelected}
-                    sx={{ cursor: "pointer" }}
+    <Paper sx={{ width: "100%", mb: 2, height: "100%" }}>
+      <SanctionTableToolbar data={csvData} />
+      <TableContainer>
+        <Table sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
+          <SanctionTableHeader
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={sanctions.length}
+          />
+          <TableBody>
+            {sortedRows.map((row) => (
+              <TableRow
+                hover
+                onClick={(event) => handleClick(event, row.key)}
+                role="checkbox"
+                aria-checked={row.isSelected}
+                tabIndex={-1}
+                key={row.key}
+                selected={row.isSelected}
+                sx={{ cursor: "pointer" }}
+              >
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    checked={row.isSelected}
+                    inputProps={{
+                      "aria-labelledby": row.labelId,
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="right">{row.date}</TableCell>
+                <TableCell align="right">{row.name}</TableCell>
+                <TableCell align="right">{row.sanction}</TableCell>
+                <TableCell align="right">{row.location}</TableCell>
+                <TableCell align="right">{row.category}</TableCell>
+                <TableCell align="right">{row.birthYear}</TableCell>
+                <TableCell align="right">{row.gender}</TableCell>
+                <TableCell align="right">{row.nation}</TableCell>
+                <TableCell align="right">{row.fisCode}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedViolationsDetail({
+                        title: `${row.date} - ${row.name}`,
+                        sanction: row.sanction,
+                        violations: row.violations,
+                      });
+                    }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={row.isSelected}
-                        inputProps={{
-                          "aria-labelledby": row.labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="right">{row.date}</TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.sanction}</TableCell>
-                    <TableCell align="right">{row.location}</TableCell>
-                    <TableCell align="right">{row.category}</TableCell>
-                    <TableCell align="right">{row.birthYear}</TableCell>
-                    <TableCell align="right">{row.gender}</TableCell>
-                    <TableCell align="right">{row.nation}</TableCell>
-                    <TableCell align="right">{row.fisCode}</TableCell>
-                  </TableRow>
-                  {row.violations.length > 0 && (
-                    <Stack width={"100%"}>
-                      {row.violations.map((violation) => (
-                        <Typography key={ulid()} variant="subtitle1">
-                          {violation}
-                        </Typography>
-                      ))}
-                    </Stack>
-                  )}
-                </>
-              ))}
-              {sortedRows.length === 0 && (
-                <TableRow
-                  style={{
-                    height: 33,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+                    <Info />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+            {sortedRows.length === 0 && (
+              <TableRow>
+                <TableCell align="center" colSpan={12}>
+                  No Data
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {selectedViolationsDetail && (
+        <ViolationsDialog
+          violations={selectedViolationsDetail.violations}
+          title={selectedViolationsDetail.title}
+          sanction={selectedViolationsDetail.sanction}
+          onClose={() => setSelectedViolationsDetail(undefined)}
+        />
+      )}
+      {loading && (
+        <StyledBackdrop open>
+          <CircularProgress />
+        </StyledBackdrop>
+      )}
+    </Paper>
   );
 };
 
 SanctionTable.propTypes = {
   sanctions: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
 };

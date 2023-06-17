@@ -1,4 +1,4 @@
-import { CssBaseline, Typography, CircularProgress, Paper, Stack } from "@mui/material";
+import { CssBaseline, Typography, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -33,7 +33,7 @@ export const MainContent = styled(Paper)`
 `;
 
 export const DefaultLayout = (props) => {
-  const { title, children, loading } = props;
+  const { title, children } = props;
   const theme = useTheme();
 
   const isLgUp = useMediaQuery(theme.breakpoints.up("xl"));
@@ -49,12 +49,9 @@ export const DefaultLayout = (props) => {
         <AppContent>
           <MainContent p={isLgUp ? 12 : 5}>
             <Helmet title={title} />
-            <Stack direction="row" gap={2}>
+            <Stack direction="row" spacing={2}>
               <Typography variant="h3" gutterBottom display="inline">
                 {title}
-              </Typography>
-              <Typography variant="h3" gutterBottom display="inline">
-                {loading && <CircularProgress />}
               </Typography>
             </Stack>
             <ErrorBoundary>

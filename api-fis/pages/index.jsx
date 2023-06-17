@@ -26,7 +26,7 @@ function IndexPage() {
 
   return (
     <DefaultLayout title="FIS Sanction Explorer" loading={loading}>
-      <Stack gap={2}>
+      <Stack spacing={2} height="100%" display="flex" flexDirection="column">
         {error && <ErrorAlert err={error} />}
         <SanctionFilter
           loading={loading}
@@ -40,7 +40,10 @@ function IndexPage() {
         {response?.length > 0 && (
           <Alert severity="info">Only top 20 are shown, please utilize filters to find a particular sanction.</Alert>
         )}
-        <SanctionTable sanctions={response || []} />
+
+        <Stack width="100%" height="calc(100vh - 325px)" overflow={"auto"}>
+          <SanctionTable sanctions={response || []} loading={loading} />
+        </Stack>
       </Stack>
     </DefaultLayout>
   );

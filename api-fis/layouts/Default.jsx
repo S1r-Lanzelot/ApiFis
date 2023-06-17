@@ -1,4 +1,4 @@
-import { CssBaseline, Typography, Paper, Stack } from "@mui/material";
+import { CssBaseline, Typography, Paper, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
@@ -8,6 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import styled from "@emotion/styled";
+import { FIS_GREY, FIS_YELLOW } from "../colors";
 
 const Root = styled.div`
   min-height: 100vh;
@@ -24,7 +25,6 @@ const AppContent = styled.div`
 
 export const MainContent = styled(Paper)`
   flex: 1;
-  padding: 5px;
   background-image: url("/mtns.jpg");
 
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
@@ -51,13 +51,17 @@ export const DefaultLayout = (props) => {
         <AppContent>
           <MainContent p={isLgUp ? 12 : 5}>
             <Helmet title={title} />
-            <Stack direction="row" spacing={2}>
-              <Typography variant="h3" gutterBottom display="inline">
+            <Box width={"100%"} backgroundColor={FIS_YELLOW} borderBottom={`2px solid ${FIS_GREY}`}>
+              <Typography variant="h6" gutterBottom display="inline" paddingLeft={1}>
                 {title}
               </Typography>
-            </Stack>
+            </Box>
             <ErrorBoundary>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>{children}</LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Box paddingX={1} paddingY={2}>
+                  {children}
+                </Box>
+              </LocalizationProvider>
             </ErrorBoundary>
           </MainContent>
         </AppContent>

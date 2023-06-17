@@ -31,7 +31,7 @@ const StyledBackdrop = styled(Backdrop)`
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 16px;
 `;
 
@@ -332,7 +332,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
     <Stack height="100%">
       <SanctionTableToolbar data={csvData} />
       <TableContainer>
-        <Table sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
+        <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
           <SanctionTableHeader
             numSelected={selected.length}
             order={order}

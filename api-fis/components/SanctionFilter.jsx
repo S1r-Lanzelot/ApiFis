@@ -27,7 +27,7 @@ export const SanctionFilter = ({
 }) => {
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
           disabled={loading}
@@ -44,7 +44,7 @@ export const SanctionFilter = ({
           ))}
         </TextField>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={12} sm={2}>
         {/* validation needs improvement here, TODO */}
         <DatePicker
           slotProps={{
@@ -62,7 +62,7 @@ export const SanctionFilter = ({
           onChange={(value) => onSeasonChange(value?.getFullYear())}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} sm={6}>
         <TextField
           fullWidth
           disabled={loading || !discipline}

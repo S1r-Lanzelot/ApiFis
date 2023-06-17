@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  frontend:
+  webapp:
     image: node:18
     restart: always
     volumes:
@@ -9,6 +9,8 @@ services:
     working_dir: /app
     entrypoint: /app/scripts/run.sh
     command: npm run dev -- --hostname=0.0.0.0
+    ports:
+      - "127.0.0.1:3000:3000"
 
 volumes:
   npm-cache:

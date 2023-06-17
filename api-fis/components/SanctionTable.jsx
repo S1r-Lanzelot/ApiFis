@@ -18,11 +18,12 @@ import { useState } from "react";
 import { useMemo } from "react";
 import { CsvExporter } from "./CsvExporter";
 import { keyBy } from "lodash";
-import { Backdrop, CircularProgress, IconButton, Stack } from "@mui/material";
+import { Backdrop, IconButton, Stack } from "@mui/material";
 import { ViolationsDialog } from "./ViolationsDialog";
 import { Info } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { FIS_YELLOW } from "../colors";
+import { SkiFreeMonsterLoader } from "./SkiFreeMonsterLoader";
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: 1000 !important;
@@ -31,7 +32,7 @@ const StyledBackdrop = styled(Backdrop)`
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: transparent;
   border-radius: 16px;
 `;
 
@@ -163,7 +164,7 @@ SanctionTableHeader.propTypes = {
 };
 
 function SanctionTableToolbar(props) {
-  const { data } = props;
+  const { data, onDownload } = props;
 
   return (
     <Toolbar
@@ -181,7 +182,11 @@ function SanctionTableToolbar(props) {
             {data.length} selected
           </Typography>
           <Tooltip title="Export">
-            <CsvExporter csvData={data} fileName={`filtered_sanctions_${new Date().getTime()}.csv`} />
+            <CsvExporter
+              csvData={data}
+              fileName={`filtered_sanctions_${new Date().getTime()}.csv`}
+              onDownload={onDownload}
+            />
           </Tooltip>
         </>
       ) : (
@@ -201,8 +206,8 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
       if (violation.rule) {
         violationText.push(violation.rule);
       }
-      if (violation.title) {
-        violationText.push(violation.title);
+      if (violation.name) {
+        violationText.push(violation.name);
       }
       violations.push(violationText.join(": "));
     }
@@ -330,7 +335,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
 
   return (
     <Stack height="100%">
-      <SanctionTableToolbar data={csvData} />
+      <SanctionTableToolbar data={csvData} onDownload={() => setSelected([])} />
       <TableContainer>
         <Table stickyHeader sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
           <SanctionTableHeader
@@ -403,7 +408,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
       )}
       {loading && (
         <StyledBackdrop open>
-          <CircularProgress />
+          <SkiFreeMonsterLoader />
         </StyledBackdrop>
       )}
     </Stack>

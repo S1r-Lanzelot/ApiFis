@@ -80,7 +80,7 @@ export const DefaultLayout = (props) => {
               Loader and favicon by{" "}
               <a target="_blank" href="https://ski.ihoc.net/" rel="noreferrer">
                 SkiFree
-              </a>{" "}
+              </a>
               author Chris Pirih
             </Typography>
           </Footer>

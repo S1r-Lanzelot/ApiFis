@@ -7,7 +7,15 @@ const limit = 20;
 const validateDiscEnum = z.enum(["jp", "cc", "nk", "al", "fs", "sb", "ma", "gs", "tm", "ss"]);
 const validateRequest = z.object({
   discipline: validateDiscEnum,
-  season: z.optional(z.preprocess((v) => +v, z.number().min(1924).max(new Date().getFullYear()))),
+  season: z.optional(
+    z.preprocess(
+      (v) => +v,
+      z
+        .number()
+        .min(1924)
+        .max(new Date().getFullYear() + 1)
+    )
+  ),
   name: z.optional(z.string()),
 });
 

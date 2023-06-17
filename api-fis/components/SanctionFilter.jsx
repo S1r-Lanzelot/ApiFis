@@ -1,5 +1,6 @@
 import { Grid, MenuItem, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { addYears } from "date-fns";
 import PropTypes from "prop-types";
 
 const disciplineCodes = {
@@ -57,7 +58,7 @@ export const SanctionFilter = ({
           value={season ? new Date(season, 1, 1) : undefined}
           views={["year"]}
           minDate={new Date(1924, 1, 1)}
-          maxDate={new Date()}
+          maxDate={addYears(new Date(), 1)}
           onChange={(value) => onSeasonChange(value?.getFullYear())}
         />
       </Grid>
@@ -65,7 +66,7 @@ export const SanctionFilter = ({
         <TextField
           fullWidth
           disabled={loading || !discipline}
-          label="Athlete's Name"
+          label="Person Name"
           value={name}
           onChange={(event) => onNameChange(event.target.value)}
         />

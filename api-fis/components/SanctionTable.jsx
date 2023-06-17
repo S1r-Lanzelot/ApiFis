@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import Tooltip from "@mui/material/Tooltip";
 import { visuallyHidden } from "@mui/utils";
@@ -19,10 +18,11 @@ import { useState } from "react";
 import { useMemo } from "react";
 import { CsvExporter } from "./CsvExporter";
 import { keyBy } from "lodash";
-import { Backdrop, CircularProgress, IconButton } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton, Stack } from "@mui/material";
 import { ViolationsDialog } from "./ViolationsDialog";
 import { Info } from "@mui/icons-material";
 import styled from "@emotion/styled";
+import { FIS_YELLOW } from "../colors";
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: 1000 !important;
@@ -70,7 +70,7 @@ const headCells = [
   },
   {
     id: "name",
-    label: "Athlete Name",
+    label: "Person Name",
   },
   {
     id: "sanction",
@@ -225,16 +225,35 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
         break;
     }
 
+    let person;
+    switch (row.function) {
+      case "athlete":
+        person = row.athlete;
+        break;
+      case "official":
+      case "team":
+        person = {
+          firstName: row.firstName,
+          lastName: row.lastName,
+        };
+        gender = "Unknown";
+        break;
+      default:
+        gender = "Unknown";
+        break;
+    }
+
     let baseRow = {
       date: new Date(row.competitionSummary.date).toLocaleDateString(),
-      name: `${row.athlete.lastName}, ${row.athlete.firstName}`,
+      name: person ? `${person.lastName}, ${person.firstName}` : "Unknown",
       location: `${row.competitionSummary.place}, ${row.competitionSummary.placeNationCode}`,
       category: row.competitionSummary.categoryCode,
-      birthYear: row.athlete.birthYear,
+      birthYear: person?.birthYear || "Unknown",
       gender,
-      nation: row.athlete.nationCode,
-      fisCode: row.athlete.fisCode,
+      nation: person?.nationCode || "Unknown",
+      fisCode: person?.fisCode || "Unknown",
       violations,
+      remarks: row.remarks,
     };
 
     for (const sanction of row.sanctions) {
@@ -310,7 +329,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
   }, [sortedRows, selected]);
 
   return (
-    <Paper sx={{ width: "100%", mb: 2, height: "100%" }}>
+    <Stack height="100%">
       <SanctionTableToolbar data={csvData} />
       <TableContainer>
         <Table sx={{ minWidth: 750 }} aria-labelledby="Sanction Table" size="small">
@@ -360,10 +379,11 @@ export const SanctionTable = ({ sanctions, loading }) => {
                         title: `${row.date} - ${row.name}`,
                         sanction: row.sanction,
                         violations: row.violations,
+                        remarks: row.remarks,
                       });
                     }}
                   >
-                    <Info />
+                    <Info sx={{ color: FIS_YELLOW }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -379,19 +399,14 @@ export const SanctionTable = ({ sanctions, loading }) => {
         </Table>
       </TableContainer>
       {selectedViolationsDetail && (
-        <ViolationsDialog
-          violations={selectedViolationsDetail.violations}
-          title={selectedViolationsDetail.title}
-          sanction={selectedViolationsDetail.sanction}
-          onClose={() => setSelectedViolationsDetail(undefined)}
-        />
+        <ViolationsDialog {...selectedViolationsDetail} onClose={() => setSelectedViolationsDetail(undefined)} />
       )}
       {loading && (
         <StyledBackdrop open>
           <CircularProgress />
         </StyledBackdrop>
       )}
-    </Paper>
+    </Stack>
   );
 };
 

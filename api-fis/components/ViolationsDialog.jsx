@@ -12,7 +12,7 @@ import { ulid } from "ulid";
 import PropTypes from "prop-types";
 import { Close } from "@mui/icons-material";
 
-export const ViolationsDialog = ({ title, violations, sanction, onClose }) => {
+export const ViolationsDialog = ({ title, violations, sanction, remarks, onClose }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -34,9 +34,7 @@ export const ViolationsDialog = ({ title, violations, sanction, onClose }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <Typography variant="span" gutterBottom>
-          {sanction}
-        </Typography>
+        <Typography variant="span">{sanction}</Typography>
         <Stack spacing={2}>
           {violations.map((violation) => (
             <Typography variant="body1" key={ulid()}>
@@ -44,6 +42,12 @@ export const ViolationsDialog = ({ title, violations, sanction, onClose }) => {
             </Typography>
           ))}
         </Stack>
+        {/* TODO */}
+        {remarks && (
+          <Typography paddingTop={2} variant="caption" sx={{ whiteSpace: "pre-line" }}>
+            {remarks}
+          </Typography>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,4 @@
-import { Alert, Stack } from "@mui/material";
+import { Alert, Paper, Stack } from "@mui/material";
 import { ErrorAlert } from "../components/ErrorAlert";
 import { SanctionFilter } from "../components/SanctionFilter";
 import { SanctionTable } from "../components/SanctionTable";
@@ -27,7 +27,6 @@ function IndexPage() {
   return (
     <DefaultLayout title="FIS Sanction Explorer" loading={loading}>
       <Stack spacing={2} height="100%" display="flex" flexDirection="column">
-        {error && <ErrorAlert err={error} />}
         <SanctionFilter
           loading={loading}
           discipline={discipline}
@@ -37,13 +36,22 @@ function IndexPage() {
           onSeasonChange={setSeason}
           onNameChange={setName}
         />
+        {error && <ErrorAlert err={error} />}
         {response?.length > 0 && (
           <Alert severity="info">Only top 20 are shown, please utilize filters to find a particular sanction.</Alert>
         )}
 
-        <Stack width="100%" height="calc(100vh - 325px)" overflow={"auto"}>
+        <Paper
+          sx={{
+            mb: "2px",
+            height: "calc(100vh - 360px)",
+            width: "100%",
+            overflowY: "auto",
+            background: "rgba(255, 255, 255, 0.6)",
+          }}
+        >
           <SanctionTable sanctions={response || []} loading={loading} />
-        </Stack>
+        </Paper>
       </Stack>
     </DefaultLayout>
   );

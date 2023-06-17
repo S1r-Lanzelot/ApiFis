@@ -19,11 +19,13 @@ const AppContent = styled.div`
   flex-direction: column;
   max-width: 100%;
   min-height: inherit;
-  padding: 10px;
+  overflow: hidden;
 `;
 
 export const MainContent = styled(Paper)`
   flex: 1;
+  padding: 5px;
+  background-image: url("/mtns.jpg");
 
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     flex: none;

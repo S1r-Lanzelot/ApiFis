@@ -200,6 +200,10 @@ function SanctionTableToolbar(props) {
 
 const sanctionRecordToTableRecord = (sanctions, isSelected) => {
   return sanctions.reduce((arr, row) => {
+    if (!row.competitionSummary) {
+      return arr;
+    }
+
     const violations = [];
     for (const violation of row.violations) {
       let violationText = [];
@@ -225,8 +229,10 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
         gender = "Female";
         break;
       case "A":
-      default:
         gender = "Neutral";
+        break;
+      default:
+        gender = "Unknown";
         break;
     }
 
@@ -241,15 +247,13 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
           firstName: row.firstName,
           lastName: row.lastName,
         };
-        gender = "Unknown";
         break;
       default:
-        gender = "Unknown";
         break;
     }
 
     let baseRow = {
-      date: new Date(row.competitionSummary.date).toLocaleDateString(),
+      date: new Date(row.competitionSummary.date),
       name: person ? `${person.lastName}, ${person.firstName}` : "Unknown",
       location: `${row.competitionSummary.place}, ${row.competitionSummary.placeNationCode}`,
       category: row.competitionSummary.categoryCode,
@@ -325,9 +329,13 @@ export const SanctionTable = ({ sanctions, loading }) => {
     const rowMap = keyBy(sortedRows, "key");
     return selected.reduce((arr, key) => {
       if (key in rowMap) {
-        const { key: _, labelId: __, isSelected: ___, violations, ...row } = rowMap[key];
-        row.violations = violations.join(", ");
-        arr.push(row);
+        const { key: _, labelId: __, isSelected: ___, violations, date, remarks, ...row } = rowMap[key];
+        arr.push({
+          date: date.toLocaleDateString(),
+          ...row,
+          violations: violations.join(", "),
+          remarks,
+        });
       }
       return arr;
     }, []);
@@ -367,7 +375,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="right">{row.date}</TableCell>
+                <TableCell align="right">{row.date.toLocaleDateString()}</TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.sanction}</TableCell>
                 <TableCell align="right">{row.location}</TableCell>
@@ -381,7 +389,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedViolationsDetail({
-                        title: `${row.date} - ${row.name}`,
+                        title: `${row.date.toLocaleDateString()} - ${row.name}`,
                         sanction: row.sanction,
                         violations: row.violations,
                         remarks: row.remarks,

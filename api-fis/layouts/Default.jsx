@@ -36,7 +36,7 @@ export const MainContent = styled(Paper)`
 
 export const Footer = styled(Stack)`
   background-color: ${FIS_BLUE};
-  padding: 20px;
+  padding: 15px;
   text-align: center;
   position: sticky;
   bottom: 0;
@@ -77,10 +77,10 @@ export const DefaultLayout = (props) => {
               Created by John Lanz for the intended audience of the FIS IT department
             </Typography>
             <Typography variant="caption" fontStyle={"italic"} color="#FFFFFF">
-              Loader and favicon by{" "}
+              Loader and Favicon by{" "}
               <a target="_blank" href="https://ski.ihoc.net/" rel="noreferrer">
                 SkiFree
-              </a>
+              </a>{" "}
               author Chris Pirih
             </Typography>
           </Footer>

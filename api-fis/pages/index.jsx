@@ -12,7 +12,7 @@ function IndexPage() {
   const [discipline, setDiscipline] = useState();
   const [season, setSeason] = useState();
   const [name, setName] = useState();
-  const [debouncedName] = useDebounce(name, 1000);
+  const [debouncedName] = useDebounce(name, 900);
 
   const [response, error, state] = usePromise(() => {
     if (!discipline) {

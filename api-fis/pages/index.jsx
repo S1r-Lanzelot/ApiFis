@@ -47,7 +47,7 @@ function IndexPage() {
             height: "calc(100vh - 360px)",
             width: "100%",
             overflowY: "auto",
-            background: "rgba(255, 255, 255, 0.6)",
+            background: "transparent",
           }}
         >
           <SanctionTable sanctions={response || []} loading={loading} />

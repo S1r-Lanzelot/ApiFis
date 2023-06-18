@@ -4,8 +4,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 // import { SevereCold } from "@mui/icons-material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import styled from "@emotion/styled";
 import { FIS_BLUE, FIS_GREY, FIS_YELLOW } from "../colors";
@@ -65,18 +63,16 @@ export const DefaultLayout = (props) => {
               </Typography>
             </Box>
             <ErrorBoundary>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Box paddingX={1} paddingY={2}>
-                  {children}
-                </Box>
-              </LocalizationProvider>
+              <Box paddingX={1} paddingY={2}>
+                {children}
+              </Box>
             </ErrorBoundary>
           </MainContent>
           <Footer>
             <Typography variant="body2" color="#FFFFFF">
               Created by John Lanz for the intended audience of the FIS IT department
             </Typography>
-            <Typography variant="caption" fontStyle={"italic"} color="#FFFFFF">
+            <Typography variant="caption" fontStyle="italic" color="#FFFFFF">
               Loader and Favicon by{" "}
               <a target="_blank" href="https://ski.ihoc.net/" rel="noreferrer">
                 SkiFree

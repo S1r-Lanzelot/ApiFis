@@ -12,12 +12,6 @@ export const GlobalStyle = () => (
       body {
         margin: 0;
       }
-
-      .MuiCardHeader-action .MuiIconButton-root {
-        padding: 4px;
-        width: 28px;
-        height: 28px;
-      }
     `}
   />
 );

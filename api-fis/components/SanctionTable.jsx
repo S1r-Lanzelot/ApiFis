@@ -24,6 +24,7 @@ import { Info } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { FIS_YELLOW } from "../colors";
 import { SkiFreeMonsterLoader } from "./SkiFreeMonsterLoader";
+import { toDateString } from "../utils/date";
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: 1000 !important;
@@ -331,7 +332,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
       if (key in rowMap) {
         const { key: _, labelId: __, isSelected: ___, violations, date, remarks, ...row } = rowMap[key];
         arr.push({
-          date: date.toLocaleDateString(),
+          date: toDateString(date),
           ...row,
           violations: violations.join(", "),
           remarks,
@@ -375,7 +376,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="right">{row.date.toLocaleDateString()}</TableCell>
+                <TableCell align="right">{toDateString(row.date)}</TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.sanction}</TableCell>
                 <TableCell align="right">{row.location}</TableCell>
@@ -389,7 +390,7 @@ export const SanctionTable = ({ sanctions, loading }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedViolationsDetail({
-                        title: `${row.date.toLocaleDateString()} - ${row.name}`,
+                        title: `${toDateString(row.date)} - ${row.name}`,
                         sanction: row.sanction,
                         violations: row.violations,
                         remarks: row.remarks,

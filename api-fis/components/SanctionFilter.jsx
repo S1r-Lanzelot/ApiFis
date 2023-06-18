@@ -2,6 +2,7 @@ import { Grid, MenuItem, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { addYears } from "date-fns";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 const disciplineCodes = {
   jp: "Ski Jumping (JP)",
@@ -25,6 +26,7 @@ export const SanctionFilter = ({
   onSeasonChange,
   onNameChange,
 }) => {
+  const [yearPickerOpen, setYearPickerOpen] = useState(false);
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
@@ -45,12 +47,13 @@ export const SanctionFilter = ({
         </TextField>
       </Grid>
       <Grid item xs={12} sm={2}>
-        {/* validation needs improvement here, TODO */}
         <DatePicker
           slotProps={{
+            field: { inputProps: { readOnly: true } },
             actionBar: {
               actions: ["clear"],
             },
+            textField: { onClick: () => setYearPickerOpen(true), onKeyDown: () => setYearPickerOpen(true) },
           }}
           fullWidth
           disabled={loading || !discipline}
@@ -60,6 +63,9 @@ export const SanctionFilter = ({
           minDate={new Date(1924, 1, 1)}
           maxDate={addYears(new Date(), 1)}
           onChange={(value) => onSeasonChange(value?.getFullYear())}
+          open={yearPickerOpen}
+          onOpen={() => setYearPickerOpen(true)}
+          onClose={() => setYearPickerOpen(false)}
         />
       </Grid>
       <Grid item xs={12} sm={6}>

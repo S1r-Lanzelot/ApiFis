@@ -42,7 +42,6 @@ export const ViolationsDialog = ({ title, violations, sanction, remarks, onClose
             </Typography>
           ))}
         </Stack>
-        {/* TODO */}
         {remarks && (
           <Typography paddingTop={2} variant="caption" sx={{ whiteSpace: "pre-line" }}>
             {remarks}

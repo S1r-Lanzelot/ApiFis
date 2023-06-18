@@ -34,6 +34,6 @@ Run the development server via docker:
 docker-compose up
 ```
 
-_NOTE: I have noticed that the docker version compiles much more slowly and hot reload does not work. I have experienced this before with nextjs. Usually, I will run the front end on my host. This would be an area that I would need to investigate further._
+_NOTE: I have noticed that the docker version compiles much more slowly and hot reload does not work. I have experienced this before with nextjs. Usually, I will run the front end on my host. This would be an area that I would need to investigate further, it may be a next configuration update._
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the website.

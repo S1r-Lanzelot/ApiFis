@@ -25,6 +25,7 @@ import styled from "@emotion/styled";
 import { FIS_YELLOW } from "../colors";
 import { SkiFreeMonsterLoader } from "./SkiFreeMonsterLoader";
 import { toDateString } from "../utils/date";
+import { getFlagEmoji } from "../utils/countryFlag";
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: 1000 !important;
@@ -266,6 +267,7 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
       birthYear: row.athlete?.birthYear || "Unknown",
       gender,
       nation: row.athlete?.nationCode || "Unknown",
+      nationFlag: getFlagEmoji(row.athlete?.nationCode),
       fisCode: row.athlete?.fisCode || "Unknown",
       violations,
       remarks: row.remarks,
@@ -335,7 +337,16 @@ export const SanctionTable = ({ sanctions, loading }) => {
     const rowMap = keyBy(sortedRows, "key");
     return selected.reduce((arr, key) => {
       if (key in rowMap) {
-        const { key: _, labelId: __, isSelected: ___, violations, date, remarks, ...row } = rowMap[key];
+        const {
+          key: _,
+          labelId: __,
+          isSelected: ___,
+          nationFlag: ____,
+          violations,
+          date,
+          remarks,
+          ...row
+        } = rowMap[key];
         arr.push({
           date: toDateString(date),
           ...row,
@@ -388,7 +399,10 @@ export const SanctionTable = ({ sanctions, loading }) => {
                 <TableCell align="right">{row.category}</TableCell>
                 <TableCell align="right">{row.birthYear}</TableCell>
                 <TableCell align="right">{row.gender}</TableCell>
-                <TableCell align="right">{row.nation}</TableCell>
+                <TableCell align="right">
+                  {row.nation}
+                  {row.nationFlag && ` ${row.nationFlag}`}
+                </TableCell>
                 <TableCell align="right">{row.fisCode}</TableCell>
                 <TableCell align="right">
                   <IconButton

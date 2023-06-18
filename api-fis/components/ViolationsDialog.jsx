@@ -11,6 +11,7 @@ import {
 import { ulid } from "ulid";
 import PropTypes from "prop-types";
 import { Close } from "@mui/icons-material";
+import { FIS_GREY } from "../colors";
 
 export const ViolationsDialog = ({ title, violations, sanction, remarks, onClose }) => {
   const theme = useTheme();
@@ -27,7 +28,7 @@ export const ViolationsDialog = ({ title, violations, sanction, remarks, onClose
             position: "absolute",
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: FIS_GREY,
           }}
         >
           <Close />

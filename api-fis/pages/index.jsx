@@ -38,7 +38,9 @@ function IndexPage() {
         />
         {error && <ErrorAlert err={error} />}
         {response?.length > 0 && (
-          <Alert severity="info">Only top 20 are shown, please utilize filters to find a particular sanction.</Alert>
+          <Alert severity="info">
+            Only top 20 are shown, please utilize filters (season and name) to find a particular sanction.
+          </Alert>
         )}
 
         <Paper

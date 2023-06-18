@@ -52,10 +52,17 @@ export default async function handler(req, res) {
     if (name) {
       const lowerName = name.toLowerCase();
       filteredItems = data.filter((item) => {
-        const athlete = item?.athlete;
-        if (athlete) {
-          const { firstName, lastName } = athlete;
-          const fullName = `${firstName} ${lastName}`.toLowerCase();
+        let firstName, lastName;
+        if (item?.athlete) {
+          firstName = item.athlete.firstName;
+          lastName = item.athlete.lastName;
+        } else {
+          firstName = item.firstName;
+          lastName = item.lastName;
+        }
+
+        if (firstName || lastName) {
+          const fullName = `${firstName}${lastName}`.toLowerCase();
           return fullName.includes(lowerName);
         }
         return false;

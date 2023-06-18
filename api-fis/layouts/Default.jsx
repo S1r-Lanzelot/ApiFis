@@ -3,7 +3,6 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 import { Helmet } from "react-helmet-async";
-// import { SevereCold } from "@mui/icons-material";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import styled from "@emotion/styled";
 import { FIS_BLUE, FIS_GREY, FIS_YELLOW } from "../colors";

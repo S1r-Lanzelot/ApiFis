@@ -237,31 +237,36 @@ const sanctionRecordToTableRecord = (sanctions, isSelected) => {
         break;
     }
 
-    let person;
+    const nameParts = [];
     switch (row.function) {
       case "athlete":
-        person = row.athlete;
+        if (row.athlete?.lastName) {
+          nameParts.push(row.athlete.lastName);
+        }
+        if (row.athlete?.firstName) {
+          nameParts.push(row.athlete.firstName);
+        }
         break;
       case "official":
       case "team":
-        person = {
-          firstName: row.firstName,
-          lastName: row.lastName,
-        };
-        break;
-      default:
+        if (row.lastName) {
+          nameParts.push(row.lastName);
+        }
+        if (row.firstName) {
+          nameParts.push(row.firstName);
+        }
         break;
     }
 
     let baseRow = {
       date: new Date(row.competitionSummary.date),
-      name: person ? `${person.lastName}, ${person.firstName}` : "Unknown",
+      name: nameParts.length > 0 ? nameParts.join(", ") : "Unknown",
       location: `${row.competitionSummary.place}, ${row.competitionSummary.placeNationCode}`,
       category: row.competitionSummary.categoryCode,
-      birthYear: person?.birthYear || "Unknown",
+      birthYear: row.athlete?.birthYear || "Unknown",
       gender,
-      nation: person?.nationCode || "Unknown",
-      fisCode: person?.fisCode || "Unknown",
+      nation: row.athlete?.nationCode || "Unknown",
+      fisCode: row.athlete?.fisCode || "Unknown",
       violations,
       remarks: row.remarks,
     };
